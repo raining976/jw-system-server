@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 
 
 import { RESULT, JWT_SECRET } from "../utils/constant.js";
-import { User, Teacher, Student } from "../db/sql.js"
+import { User, Teacher, Student, Student_view } from "../db/sql.js"
 
 const Op = Sequelize.Op;
 
@@ -47,104 +47,30 @@ class user {
                         [Sequelize.Op.like]: `%${keyword}%`
                     }
                 },
-                // {
-                //     role: {
-                //         [Sequelize.Op.like]: `%${keyword}%`
-                //     }
-                // }
+                {
+                    role: {
+                        [Sequelize.Op.like]: `%${keyword}%`
+                    }
+                }
             ]
         } : {}
 
-        if (role) whereCondition["role"] = role;
-
         // 根据角色动态选择要包含的表
         let include = [];
-        let studentCondition = keyword ?
-            {
-                user_id: { [Op.col]: 'User.user_id' },
-                [Sequelize.Op.or]: [
-                    {
-                        name: {
-                            [Sequelize.Op.like]: `%${keyword}%`
-                        }
-                    },
-                    {
-                        major: {
-                            [Sequelize.Op.like]: `%${keyword}%`
-                        }
-                    }
-                ]
-            } : { user_id: { [Op.col]: 'User.user_id' },}
-        if (role === 'teacher') {
-            include.push({
-                model: Teacher,
-                required: false, // 不强制要求匹配（left join）
-                where: {
-                    user_id: { [Op.col]: 'User.user_id' },
-                },
-                attributes: ['teacher_id', 'department', 'name', 'gender'], // 选择教师表的相关字段
-                as: 'teacher' // 指定别名
-            });
-        } else if (role === 'student') {
-            include.push({
-                model: Student,
-                required: false, // 同样不强制要求匹配
-                where: studentCondition,
-                attributes: ['student_id', 'major', 'grade', 'name', 'gender'], // 选择学生表的相关字段
-                as: 'student' // 指定别名
-            });
-        }
-
-
-        // 递归展开嵌套对象
-        function flattenObject(obj, prefix = '') {
-            let result = {};
-
-            for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    const newKey = prefix ? `${key}` : key;
-                    const value = obj[key];
-
-                    if (typeof value === 'object' && value !== null) {
-                        // 如果值是对象，递归调用并展开
-                        Object.assign(result, flattenObject(value, newKey));
-                    } else {
-                        // 否则直接将值加到结果对象
-                        result[newKey] = value;
-                    }
-                }
-            }
-
-            return result;
-        }
-
         await User.userFind({
             attributes: ['user_id', 'username', 'role'], // 可选：选择返回的字段
             where: whereCondition,
             offset: offset,
             limit: limit,
             order: [['user_id', 'DESC']], // 可选：按创建时间降序排序
-            include: include
+          
         }).then(result => {
-            // 在查询结果中合并 User 和对应角色的相关信息
-            const data = result.rows.map(user => {
-                const userInfo = user.toJSON();  // 获取用户信息
-                let flattenedUser = flattenObject(userInfo);  // 扁平化用户信息
-                if (user.role === 'teacher') {
-                    const teacherInfo = flattenObject(userInfo.teacher);  // 扁平化教师信息
-                    flattenedUser = { ...flattenedUser, ...teacherInfo };
-                } else if (user.role === 'student') {
-                    const studentInfo = flattenObject(userInfo.student);  // 扁平化学生信息
-                    flattenedUser = { ...flattenedUser, ...studentInfo };
-                }
-                return flattenedUser;
-            });
             res.json({
                 code: RESULT.SUCCESS.code,
                 msg: RESULT.SUCCESS.msg,
                 data: {
                     total: result.count,
-                    data: data,
+                    data: result.rows,
                 }
 
             })

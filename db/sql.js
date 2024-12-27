@@ -18,20 +18,27 @@ import StudentModel from "../model/student.js"
 import TeacherModel from "../model/teacher.js"
 import SCourseModel from "../model/scourse.js"
 import SCourse_view_model from '../model/scourse_view.js';
+import student_view from '../model/student_view.js';
+import teacher_view from '../model/teacher_view.js';
+import EnrollmentModel from '../model/enrollment.js'
+import Student_courses_view_model from "../model/student_courses_view.js"
 
 const Course = CourseModel(sequelize, DataTypes)
 const SCourse = SCourseModel(sequelize, DataTypes)
 const User = UserModel(sequelize, DataTypes)
 const Student = StudentModel(sequelize, DataTypes)
 const Teacher = TeacherModel(sequelize, DataTypes)
+const Enrollment = EnrollmentModel(sequelize, DataTypes)
 
 // 视图
-const SCourse_view = SCourse_view_model(sequelize,DataTypes)
-
+const SCourse_view = SCourse_view_model(sequelize, DataTypes)
+const Student_view = student_view(sequelize, DataTypes)
+const Teacher_view = teacher_view(sequelize, DataTypes)
+const Student_courses_view = Student_courses_view_model(sequelize, DataTypes)
 
 // 进行模型关联
-User.hasOne(Teacher, { foreignKey: 'user_id' , as:'teacher'});
-User.hasOne(Student, { foreignKey: 'user_id' , as:'student'});
+User.hasOne(Teacher, { foreignKey: 'user_id', as: 'teacher' });
+User.hasOne(Student, { foreignKey: 'user_id', as: 'student' });
 
 
 
@@ -52,4 +59,4 @@ sequelize.authenticate().then(function () {
 });
 
 
-export { sequelize, Sequelize, Student, User, Teacher , Course, SCourse ,SCourse_view}
+export { sequelize, Sequelize, Student, User, Teacher, Course, SCourse, SCourse_view, Student_view, Teacher_view,Enrollment,Student_courses_view }

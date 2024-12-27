@@ -5,7 +5,7 @@ export default function (sequelize, DataTypes) {
             autoIncrement: true,
             primaryKey: true,
         },
-        instance_id: {
+        scourse_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -23,7 +23,7 @@ export default function (sequelize, DataTypes) {
 
     // 外键关联
     Enrollment.associate = (models) => {
-        Enrollment.belongsTo(models.CourseInstance, { foreignKey: 'instance_id', onDelete: 'CASCADE' });
+        Enrollment.belongsTo(models.SCourese, { foreignKey: 'scourse_id', onDelete: 'CASCADE' });
         Enrollment.belongsTo(models.Student, { foreignKey: 'student_id', onDelete: 'CASCADE' });
     };
 

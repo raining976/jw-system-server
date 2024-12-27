@@ -24,7 +24,15 @@ export default function (sequelize, DataTypes) {
     }, {
         tableName: 'scourse',
         timestamps: false,
-    });
+        indexes: [
+            {
+                unique: true,
+                fields: ['teacher_id', 'day', 'time'], // 设置唯一约束的字段组合
+            },
+        ],
+    },
+    );
+
 
     // 外键关联
     CourseInstance.associate = (models) => {
@@ -32,7 +40,7 @@ export default function (sequelize, DataTypes) {
         CourseInstance.belongsTo(models.Teacher, { foreignKey: 'teacher_id', onDelete: 'CASCADE' });
     };
 
-    
+
 
     return CourseInstance;
 }

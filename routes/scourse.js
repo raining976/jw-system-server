@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.get('/find', SCourseController.findSCourse)
 
+
 router.use(authController.verifyIsAdmin)
 router.post('/add', SCourseController.createSCourse)
 router.post('/delete', SCourseController.deleteCourse)

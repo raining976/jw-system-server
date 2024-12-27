@@ -23,11 +23,19 @@ class scourse {
             return
         }
 
+
+
         SCourse.create({ course_id, teacher_id, day, time }).then(result => {
             res.json(RESULT.CREATE_SUCCESS)
         }).catch(err => {
             console.log("err", err)
-            res.json(RESULT.INTERNAL_ERROR)
+            if (err.name == 'SequelizeUniqueConstraintError') {
+                res.json(RESULT.EXIST_SCOURSE)
+            } else {
+                res.json(RESULT.INTERNAL_ERROR)
+            }
+           
+
         })
 
 
@@ -87,7 +95,6 @@ class scourse {
     // 删除选课
     async deleteCourse(req, res, next) {
         const { ids } = req.body
-        console.log('ids', ids)
         const result = await SCourse.destroy({ where: { scourse_id: ids } })
         if (result > 0) {
             res.json({ ...RESULT.DELETE_SUCCESS, data: result })
@@ -96,6 +103,8 @@ class scourse {
         }
 
     }
+
+    
 
 }
 const SCourseController = new scourse()
