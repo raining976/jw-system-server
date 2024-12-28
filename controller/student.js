@@ -134,6 +134,7 @@ class student {
             return
         }
         let student_id = isExistStudent.student_id
+
         let chosenIt = await Enrollment.findOne({ where: { scourse_id, student_id } })
         if (chosenIt) {
             res.json(RESULT.CHOSEN_COURSE)
@@ -204,10 +205,10 @@ class student {
     async cancelCourse(req, res, next) {
         const { enrollment_id } = req.body
 
-        Enrollment.destroy({where: {enrollment_id}}).then(result=>{
+        Enrollment.destroy({ where: { enrollment_id } }).then(result => {
             res.json(RESULT.CANCEL_SUCCESS)
-        }).catch(e=>{
-            console.log('e',e)
+        }).catch(e => {
+            console.log('e', e)
             res.json(RESULT.OP_ERROR)
         })
 

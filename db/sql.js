@@ -22,6 +22,10 @@ import student_view from '../model/student_view.js';
 import teacher_view from '../model/teacher_view.js';
 import EnrollmentModel from '../model/enrollment.js'
 import Student_courses_view_model from "../model/student_courses_view.js"
+import Scourse_students_view_model from "../model/scourse_students.view.js"
+import ScheduleChangeModel from "../model/scheduleChange.js"
+import Stu_change_view_model from "../model/stu_change_view.js"
+import Admin_change_view_model from "../model/admin_change_view.js"
 
 const Course = CourseModel(sequelize, DataTypes)
 const SCourse = SCourseModel(sequelize, DataTypes)
@@ -29,12 +33,18 @@ const User = UserModel(sequelize, DataTypes)
 const Student = StudentModel(sequelize, DataTypes)
 const Teacher = TeacherModel(sequelize, DataTypes)
 const Enrollment = EnrollmentModel(sequelize, DataTypes)
+const ScheduleChange = ScheduleChangeModel(sequelize, DataTypes)
+
+
 
 // 视图
 const SCourse_view = SCourse_view_model(sequelize, DataTypes)
 const Student_view = student_view(sequelize, DataTypes)
 const Teacher_view = teacher_view(sequelize, DataTypes)
 const Student_courses_view = Student_courses_view_model(sequelize, DataTypes)
+const Scourse_students_view = Scourse_students_view_model(sequelize, DataTypes)
+const Stu_change_view = Stu_change_view_model(sequelize, DataTypes)
+const Admin_change_view = Admin_change_view_model(sequelize, DataTypes)
 
 // 进行模型关联
 User.hasOne(Teacher, { foreignKey: 'user_id', as: 'teacher' });
@@ -59,4 +69,22 @@ sequelize.authenticate().then(function () {
 });
 
 
-export { sequelize, Sequelize, Student, User, Teacher, Course, SCourse, SCourse_view, Student_view, Teacher_view,Enrollment,Student_courses_view }
+export {
+    sequelize,
+    Sequelize,
+    Student,
+    User,
+    Teacher,
+    Course,
+    SCourse,
+    SCourse_view,
+    Student_view,
+    Teacher_view,
+    Enrollment,
+    Student_courses_view,
+    Scourse_students_view,
+    ScheduleChange,
+    Stu_change_view,
+    Admin_change_view
+
+}

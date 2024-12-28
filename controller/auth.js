@@ -16,6 +16,7 @@ class auth {
     async verifyIsAdmin(req, res, next) {
         let { username } = req.decoded
         const user = await User.userFindOne({ where: { username } })
+        
         if (!user || user.role != 'admin') {
             res.json(RESULT.FORBIDDEN)
         }else next()

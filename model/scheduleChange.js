@@ -1,4 +1,4 @@
-export default function (sequelize, DateTypes) {
+export default function (sequelize, DataTypes) {
 
     const ScheduleChange = sequelize.define('ScheduleChange', {
         change_id: {
@@ -6,7 +6,7 @@ export default function (sequelize, DateTypes) {
             autoIncrement: true,
             primaryKey: true
         },
-        course_id: {
+        scourse_id: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
@@ -14,11 +14,7 @@ export default function (sequelize, DateTypes) {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        original_schedule: {
-            type: DataTypes.STRING(100),
-            allowNull: true
-        },
-        requested_schedule: {
+        detail: {
             type: DataTypes.STRING(100),
             allowNull: true
         },
@@ -27,8 +23,8 @@ export default function (sequelize, DateTypes) {
             allowNull: true
         },
         status: {
-            type: DataTypes.ENUM('pending', 'approved', 'rejected'),
-            defaultValue: 'pending'
+            type: DataTypes.ENUM('申请中', '同意', '拒绝'),
+            defaultValue: '申请中'
         },
         requested_at: {
             type: DataTypes.DATE,
@@ -41,8 +37,8 @@ export default function (sequelize, DateTypes) {
     
     // 外键关联
     ScheduleChange.associate = (models) => {
-        ScheduleChange.belongsTo(models.Course, {
-            foreignKey: 'course_id',
+        ScheduleChange.belongsTo(models.SCourse, {
+            foreignKey: 'scourse_id',
             onDelete: 'CASCADE'
         });
         ScheduleChange.belongsTo(models.Teacher, {

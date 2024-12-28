@@ -10,6 +10,8 @@ const RESULT = {
     LOGIN_SUCCESS: { code: 20005, msg: '登录成功' },
     CHOOSE_SUCCESS: { code: 20006, msg: '选课成功' },
     CANCEL_SUCCESS: { code: 20007, msg: '退选成功' },
+    APPLY_SUCCESS: { code: 20008, msg: '申请成功' },
+    
 
 
     ARG_ERROR: { code: 40000, msg: '参数错误' },
