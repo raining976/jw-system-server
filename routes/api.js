@@ -9,7 +9,7 @@ import scheduleChange from "./scheduleChange.js"
 
 export default app =>{
     // app.use(appType)
-    app.use(token)
+    app.use(token) // 用户鉴权
     app.use('/teacher', teacher)
     app.use('/student', student)
     app.use('/course', course)

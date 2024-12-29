@@ -1,4 +1,4 @@
-import { Enrollment, SCourse, Sequelize, sequelize, Student_view } from "../db/sql.js";
+import { Enrollment, SCourse, Scourse_students_view, Sequelize, sequelize, Student_view } from "../db/sql.js";
 import { DataTypes, EmptyResultError, where } from "sequelize";
 
 import jwt from "jsonwebtoken"
@@ -123,7 +123,7 @@ class student {
 
     // 学生选课
     async choseCourse(req, res, next) {
-        const { scourse_id } = req.body
+        const { scourse_id, course_id } = req.body
 
 
         let { username } = req.decoded
@@ -133,9 +133,10 @@ class student {
             res.json(RESULT.USER_NOT_EXIST)
             return
         }
+        
         let student_id = isExistStudent.student_id
 
-        let chosenIt = await Enrollment.findOne({ where: { scourse_id, student_id } })
+        let chosenIt = await Student_courses_view.findOne({ where: { course_id, username }, attributes:['enrollment_id'] })
         if (chosenIt) {
             res.json(RESULT.CHOSEN_COURSE)
             return
@@ -177,6 +178,10 @@ class student {
                 }
             ]
         } : {};
+
+        if(username) whereCondition['username'] = username
+
+        
         try {
             let result = await Student_courses_view.findAndCountAll({
                 attributes: ['enrollment_id', 'grade', 'course_id', 'scourse_id', 'course_name', 'teacher_name', 'day', 'time'],
