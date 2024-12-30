@@ -26,6 +26,7 @@ import Scourse_students_view_model from "../model/scourse_students.view.js"
 import ScheduleChangeModel from "../model/scheduleChange.js"
 import Stu_change_view_model from "../model/stu_change_view.js"
 import Admin_change_view_model from "../model/admin_change_view.js"
+import scourse from '../model/scourse.js';
 
 const Course = CourseModel(sequelize, DataTypes)
 const SCourse = SCourseModel(sequelize, DataTypes)
@@ -34,7 +35,6 @@ const Student = StudentModel(sequelize, DataTypes)
 const Teacher = TeacherModel(sequelize, DataTypes)
 const Enrollment = EnrollmentModel(sequelize, DataTypes)
 const ScheduleChange = ScheduleChangeModel(sequelize, DataTypes)
-
 
 
 // 视图
@@ -50,8 +50,26 @@ const Admin_change_view = Admin_change_view_model(sequelize, DataTypes)
 User.hasOne(Teacher, { foreignKey: 'user_id', as: 'teacher' });
 User.hasOne(Student, { foreignKey: 'user_id', as: 'student' });
 
+Teacher.hasOne(SCourse, { foreignKey: 'teacher_id', onDelete: 'CASCADE' })
+Teacher.hasOne(ScheduleChange, { foreignKey: 'change_id', onDelete: 'CASCADE' })
+
+Student.hasOne(Enrollment, { foreignKey: 'student_id', onDelete: 'CASCADE' })
+
+Course.hasOne(SCourse, { foreignKey: 'course_id', onDelete: 'CASCADE' })
+SCourse.hasOne(Enrollment, { foreignKey: 'scourse_id', onDelete: 'CASCADE' })
+SCourse.hasOne(ScheduleChange, { foreignKey: 'change_id', onDelete: 'CASCADE' })
 
 
+
+
+ScheduleChange.belongsTo(SCourse, {
+    foreignKey: 'scourse_id',
+    onDelete: 'CASCADE'
+});
+ScheduleChange.belongsTo(Teacher, {
+    foreignKey: 'teacher_id',
+    onDelete: 'CASCADE'
+});
 // 在应用启动时添加 // caution!force如果是true的话每次启动都会先删除表后创建表
 sequelize.sync({ force: false, alter: true }).then(() => {
     console.log("数据库表同步完成");

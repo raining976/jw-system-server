@@ -119,7 +119,7 @@ class scourse {
         const whereCondition = keyword ? {
             [Sequelize.Op.or]: [
                 {
-                    student_name: {
+                    name: {
                         [Sequelize.Op.like]: `%${keyword}%`
                     }
                 },

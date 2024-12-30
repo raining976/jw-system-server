@@ -1,5 +1,5 @@
 export default function (sequelize, DataTypes) {
-    const CourseInstance = sequelize.define('SCourse', {
+    const SCourse = sequelize.define('SCourse', {
         scourse_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -35,12 +35,12 @@ export default function (sequelize, DataTypes) {
 
 
     // 外键关联
-    CourseInstance.associate = (models) => {
-        CourseInstance.belongsTo(models.Course, { foreignKey: 'course_id', onDelete: 'CASCADE' });
-        CourseInstance.belongsTo(models.Teacher, { foreignKey: 'teacher_id', onDelete: 'CASCADE' });
+    SCourse.associate = (models) => {
+        SCourse.belongsTo(models.Course, { foreignKey: 'course_id', onDelete: 'CASCADE' });
+        SCourse.belongsTo(models.Teacher, { foreignKey: 'teacher_id', onDelete: 'CASCADE' });
     };
 
 
 
-    return CourseInstance;
+    return SCourse;
 }
